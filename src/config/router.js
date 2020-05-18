@@ -10,7 +10,7 @@ const routes = [
         path: '/admin',
         component: LayoutAdmin,
         exact: false,
-        routers: [
+        routes: [
             {
                 path: '/admin',
                 component: AdminHome,
