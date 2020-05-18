@@ -26,8 +26,8 @@ export default function LayoutAdmin(props) {
         return routes.map((route, index) => (
             <Route
               key={index}
-              path={routes.path}
-              exact={routes.exact}
+              path={route.path}
+              exact={route.exact}
               component={route.component}
             />
         ));
