@@ -4,12 +4,13 @@ import { Layout, Menu, Icon } from 'antd';
 
 import './MenuSider.scss';
 
-export default function MenuSider() {
-
+export default function MenuSider(props) {
+    
+    const { menuCollapsed } = props;
     const { Sider } = Layout;
 
     return (
-        <Sider className='admin-sider'>
+        <Sider className='admin-sider' collapsed={menuCollapsed}>
         <Menu theme='dark' mode='inline' defaultOpenKeys={['1']}>
             <Menu.Item key='1'>
                 <Link to={'/admin'}>
