@@ -37,3 +37,43 @@ export function signUpApi(data) {
         }
     })
 }
+
+export function signInApi(data) {
+    const url = `${basePath}/${apiVersion}/sign-in`;
+    const params = {
+        method: 'POST',
+        body: JSON.stringify(data),
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    };
+
+    return fetch(url, params) 
+    .then(response => {
+        return response.json();  
+    })
+    .then(result => {
+        console.log(result);
+        if(!result.token) {
+            return {
+                status: 400,
+                ok: false,
+                message: result.message
+            };
+        }
+        return {
+            status: 200,
+            ok: true,
+            data: result 
+        };
+    })
+    .catch(err => {
+        console.log('asdasdad');
+        return {
+            status: 404,
+            ok: false,
+            message: err.message
+        };
+    })
+
+}
