@@ -53,7 +53,6 @@ export function signInApi(data) {
         return response.json();  
     })
     .then(result => {
-        console.log(result);
         if(!result.token) {
             return {
                 status: 400,
@@ -68,7 +67,6 @@ export function signInApi(data) {
         };
     })
     .catch(err => {
-        console.log('asdasdad');
         return {
             status: 404,
             ok: false,
