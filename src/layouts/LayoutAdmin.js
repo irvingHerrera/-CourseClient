@@ -14,7 +14,7 @@ export default function LayoutAdmin(props) {
     const { Header, Content, Footer } = Layout;
     const { user, isLoading } = useAuth();
     
-    if(!user) { 
+    if(!user && !isLoading) { 
         return (
             <>
                 <Route path='/admin/Login' component={AdminSignIn}></Route>
@@ -23,23 +23,28 @@ export default function LayoutAdmin(props) {
         );
     }
 
-    return (
-        <Layout>
-            <MenuSider menuCollapsed={menuCollapsed}></MenuSider>
-            <Layout className='layout-admin' style={{marginLeft: menuCollapsed ? '80px' : '200px'}}>
-                <Header className='layout-admin__header'>
-                    <MenuTop 
-                        menuCollapsed={menuCollapsed} 
-                        setMenuCollapsed={setMenuCollapsed}>
-                    </MenuTop>
-                </Header>
-                <Content className='layout-admin__content'>
-                    <LoadRoutes routes={routes}></LoadRoutes>
-                </Content>
-                <Footer className='layout-admin__footer'>Irving Herrera</Footer>
+    if(user && !isLoading) {
+        return (
+            <Layout>
+                <MenuSider menuCollapsed={menuCollapsed}></MenuSider>
+                <Layout className='layout-admin' style={{marginLeft: menuCollapsed ? '80px' : '200px'}}>
+                    <Header className='layout-admin__header'>
+                        <MenuTop 
+                            menuCollapsed={menuCollapsed} 
+                            setMenuCollapsed={setMenuCollapsed}>
+                        </MenuTop>
+                    </Header>
+                    <Content className='layout-admin__content'>
+                        <LoadRoutes routes={routes}></LoadRoutes>
+                    </Content>
+                    <Footer className='layout-admin__footer'>Irving Herrera</Footer>
+                </Layout>
             </Layout>
-        </Layout>
-    );
+        );
+    }
+
+    return null;
+    
 }
     function LoadRoutes({ routes }) {
         return (
