@@ -1,8 +1,9 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {Switch, List, Avatar, Button, Icon} from 'antd';
 import NoAvatar from '../../../../assets/png/no-avatar.png';
-import Modal from '../../../Modal'
-import EditUserForm from '../EditUserForm'
+import Modal from '../../../Modal';
+import EditUserForm from '../EditUserForm';
+import { getAvatarApi } from '../../../../api/user';
 
 import './ListUsers.scss';
 
@@ -50,8 +51,27 @@ function UserActive(props) {
             className='users-active'
             itemLayout='horizontal'
             dataSource={usersActive}
-            renderItem={user => (
-                <List.Item
+            renderItem={user => <GetUserActive user={user} editUser={editUser} />}
+        />
+    );
+}
+
+function GetUserActive(props) {
+    const { user, editUser } = props;
+    const [avatar, setAvatar] = useState(null);
+
+    useEffect(() => {
+        if(user.avatar) {
+            getAvatarApi(user.avatar).then(response => {
+                setAvatar(response);
+            });
+        } else {
+            setAvatar(null);
+        }
+    }, [user]);
+
+    return(
+        <List.Item
                     actions = {[
                         <Button type='primary'
                         onClick={() => editUser(user)}>
@@ -67,16 +87,15 @@ function UserActive(props) {
                     ]}
                 >
                     <List.Item.Meta
-                    avatar={<Avatar src={user.avatar ? user.avatar : NoAvatar}></Avatar>}
+                    avatar={<Avatar src={avatar ? avatar : NoAvatar}></Avatar>}
                     title={`${user.name ? user.name : '...'}
                             ${user.lastname ? user.lastname : '...'}
                           `}
                     description={user.email}>
                     </List.Item.Meta>
                 </List.Item>
-            )}
-        />
     );
+
 }
 
 function UserInactive(props) {
@@ -86,8 +105,28 @@ function UserInactive(props) {
             className='users-active'
             itemLayout='horizontal'
             dataSource={usersInactive}
-            renderItem={user => (
-                <List.Item
+            renderItem={user => <GetUserInactive user={user} />}
+        />
+    );
+}
+
+function GetUserInactive(props) {
+    const { user } = props;
+
+    const [avatar, setAvatar] = useState(null);
+
+    useEffect(() => {
+        if(user.avatar) {
+            getAvatarApi(user.avatar).then(response => {
+                setAvatar(response);
+            });
+        } else {
+            setAvatar(null);
+        }
+    }, [user]);
+
+    return(
+        <List.Item
                     actions = {[
                         <Button type='primary'
                         onClick={() => {console.log('Editar');
@@ -99,14 +138,13 @@ function UserInactive(props) {
                     ]}
                 >
                     <List.Item.Meta
-                    avatar={<Avatar src={user.avatar ? user.avatar : NoAvatar}></Avatar>}
+                    avatar={<Avatar src={avatar ? avatar : NoAvatar}></Avatar>}
                     title={`${user.name ? user.name : '...'}
                             ${user.lastname ? user.lastname : '...'}
                           `}
                     description={user.email}>
                     </List.Item.Meta>
                 </List.Item>
-            )}
-        />
     );
+
 }
