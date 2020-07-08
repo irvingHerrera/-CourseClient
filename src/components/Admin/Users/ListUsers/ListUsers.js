@@ -8,7 +8,7 @@ import { getAvatarApi } from '../../../../api/user';
 import './ListUsers.scss';
 
 export default function ListUsers(props) {
-    const {usersActive, usersInactive} = props;
+    const {usersActive, usersInactive, setReloadUsers} = props;
     const [viewUserActive, setViewUserActive] = useState(true);
     const [isVisible, setIsVisible] = useState(false);
     const [modalTitle, setModalTitle] = useState('');
@@ -26,7 +26,13 @@ export default function ListUsers(props) {
                     {viewUserActive ? 'Usuarios Activos' : 'Usuarios Inactivos'}
                 </span>
             </div>
-            {viewUserActive ? <UserActive usersActive={usersActive} setIsVisible={setIsVisible} setModalTitle={setModalTitle} setModalContent={setModalContent}/> : 
+            {viewUserActive ? 
+            <UserActive 
+                usersActive={usersActive} 
+                setIsVisible={setIsVisible} 
+                setModalTitle={setModalTitle} 
+                setModalContent={setModalContent}
+                setReloadUsers={setReloadUsers}/> : 
             <UserInactive usersInactive={usersInactive} setIsVisible={setIsVisible} />}
             <Modal title={modalTitle} isVisible={isVisible} setIsVisible={setIsVisible}>
                 {modalContent}
@@ -37,12 +43,12 @@ export default function ListUsers(props) {
 
 
 function UserActive(props) {
-    const {usersActive, setIsVisible, setModalTitle, setModalContent} = props;
+    const {usersActive, setIsVisible, setModalTitle, setModalContent, setReloadUsers} = props;
     
 
     const editUser = user => {
         setModalTitle(`Editar ${user.name ? user.name : '...'} ${user.lsdtnsmr ? user.lastname : '...'}`);
-        setModalContent(<EditUserForm user={user}></EditUserForm>);
+        setModalContent(<EditUserForm user={user} setIsVisible={setIsVisible} setReloadUsers={setReloadUsers} ></EditUserForm>);
         setIsVisible(true);
     }
 
@@ -51,7 +57,7 @@ function UserActive(props) {
             className='users-active'
             itemLayout='horizontal'
             dataSource={usersActive}
-            renderItem={user => <GetUserActive user={user} editUser={editUser} />}
+            renderItem={user => <GetUserActive user={user} editUser={editUser}  />}
         />
     );
 }

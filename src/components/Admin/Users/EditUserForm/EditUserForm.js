@@ -1,13 +1,14 @@
 import React, {useState, useCallback, useEffect} from 'react';
-import {Avatar, Form, Input, Select, Row, Col, Button, Icon} from 'antd';
+import {Avatar, Form, Input, Select, Row, Col, Button, Icon, notification} from 'antd';
 import { useDropzone } from 'react-dropzone';
 import NoAvatar from '../../../../assets/png/no-avatar.png';
-import { getAvatarApi } from '../../../../api/user';
+import { getAvatarApi, uploadAvatarApi, updateUserAPi } from '../../../../api/user';
+import { getAccessTokenApi } from '../../../../api/auth';
 
 import './EditUserForm.scss';
 
 export default function EditUserForm(props) {
-    const {user} = props;
+    const {user, setIsVisible, setReloadUsers} = props;
     const [avatar, setAvatar] = useState(null);
     const [userData, setUserData] = useState({
         name: user.name,
@@ -47,7 +48,54 @@ export default function EditUserForm(props) {
 
     const updateUser = e => {
         e.preventDefault();
-        console.log(userData);
+        const token = getAccessTokenApi();
+        let userUpdate = userData;
+
+        if(userUpdate.password || userUpdate.repeatPass) {
+            if(userUpdate.password !== userUpdate.repeatPass) {
+                notification['error']({
+                    message: 'Las contraseñas tienen que ser iguales.'
+                });
+                return;
+            } else {
+                delete userData.repeatPass;
+            }
+        }
+
+        if(!userUpdate.name || !userUpdate.lastname || !userUpdate.email) {
+            notification['error']({
+                message: 'El nombre, appeliudos y email son obligatorios.'
+            });
+
+            return;
+        }
+
+        if(typeof userUpdate.avatar === 'object') {
+            uploadAvatarApi(token, userUpdate.avatar, user._id)
+            .then(response => {
+                userUpdate.avatar = response.avatarName;
+                updateUserAPi(token, userUpdate, user._id)
+                .then(response => {
+                    notification['success']({
+                        message: response.message
+                    });
+                    setUserData({...userData, password:"", repeatPassword:""});
+                    setIsVisible(false);
+                    setReloadUsers(true);
+                });
+            });
+        } else {
+            updateUserAPi(token, userUpdate, user._id)
+            .then(response => {
+                notification['success']({
+                    message: response.message
+                });
+                setUserData({...userData, password:"", repeatPassword:""});
+                setIsVisible(false);
+                setReloadUsers(true);
+            });
+        }
+        
     };
 
     return(
@@ -102,7 +150,7 @@ function UploadAvatar(props) {
 function EditForm(props) {
     const { userData, setUserData, updateUser } = props;
     const { Option } = Select;
-
+   
     return (
        <Form className='form-edit' onSubmit={updateUser}>
            <Row gutter={24}>
@@ -157,6 +205,7 @@ function EditForm(props) {
                          prefix={<Icon type='lock'></Icon>}
                          type='password'
                          placeholder='Contraseña' 
+                         value={userData.password}
                          onChange={e => setUserData({ ...userData, password: e.target.value })}
                         ></Input>
                     </Form.Item>
@@ -167,6 +216,7 @@ function EditForm(props) {
                             prefix={<Icon type='lock'></Icon>}
                             type='password'
                             placeholder='Repetir contraseña'
+                            value={userData.repeatPass}
                             onChange={e => setUserData({ ...userData, repeatPass : e.target.value })}
                             ></Input>
                         </Form.Item>
