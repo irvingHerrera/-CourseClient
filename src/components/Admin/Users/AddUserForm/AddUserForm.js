@@ -12,8 +12,39 @@ export default function AddUserForm(props) {
 
     const addUser = event => {
         event.preventDefault();
+        console.log(userData);
+        if(!userData.name ||
+            !userData.lastname ||
+            !userData.role ||
+            !userData.email ||
+            !userData.password || 
+            !userData.repeatPassword) {
+                notification['error']( {
+                    message: 'Todos los campos son obligatorios'
+                });
+            } else if(userData.password !== userData.repeatPassword) {
+                notification['error']( {
+                    message: 'Las contraseñas deben ser iguales.'       
+                });
+            } else {
+                const accesToken = getAccessTokenApi();
 
-        console.log('add user');
+                singUpAdminApi(accesToken, userData)
+                .then(response => {
+                    notification['success']( {
+                        message: response          
+                    });
+                    setIsVisible(false);
+                    setReloadUsers(true);
+                    setUserData({});
+                })
+                .catch(err => {
+                    notification['error']( {
+                        message: err    
+                    });
+                });
+            }
+
     };
 
     return(<div className='add-user-form'>
@@ -65,7 +96,10 @@ function AddForm(props) {
                 </Col>
                 <Col span={12}>
                     <Form.Item>
-                       <Select>
+                       <Select 
+                       placeholder='Selecciona un rol'
+                       value={userData.role}
+                       onChange={e => setUserData({ ...userData, role: e})}>
                            <Option value='admin'>Administrador</Option>
                            <Option value='editor'>Editor</Option>
                            <Option value='revisor'>Revisor</Option>
