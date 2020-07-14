@@ -237,3 +237,27 @@ export function deteleUserApi(token, userId) {
     });
 
 }
+
+export function singUpAdminApi(token, data) {
+    const url = `${basePath}/${apiVersion}/singUpAdmin/`;
+
+    const params = {
+        method: 'POST',
+        body: JSON.stringify(data),
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: token
+        }
+    };
+
+    return fetch(url, params)
+    .then(response => {
+        return response.json();  
+    })
+    .then(result => {
+        return result.message;
+    })
+    .catch( error => {
+        return error.message;
+    })
+}

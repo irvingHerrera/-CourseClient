@@ -3,6 +3,7 @@ import {Switch, List, Avatar, Button, Icon, notification, Modal as ModalAnt} fro
 import NoAvatar from '../../../../assets/png/no-avatar.png';
 import Modal from '../../../Modal';
 import EditUserForm from '../EditUserForm';
+import AddUserForm from '../AddUserForm';
 import { getAvatarApi, activateUserApi, deteleUserApi } from '../../../../api/user';
 import { getAccessTokenApi } from '../../../../api/auth';
 
@@ -17,6 +18,15 @@ export default function ListUsers(props) {
     const [modalTitle, setModalTitle] = useState('');
     const [modalContent, setModalContent] = useState(null);
     
+    const addUserModal = () => {
+        setIsVisible(true);
+        setModalTitle('Creando nuevo usuario');
+        setModalContent(<AddUserForm 
+                        setIsVisible={setIsVisible} 
+                        setReloadUsers={setReloadUsers}>
+                        </AddUserForm>);
+    }
+
     const showModalDeleteUser = (user) => {
 
         confirm({ 
@@ -48,16 +58,23 @@ export default function ListUsers(props) {
 
     return (
         <div className='list-users'>
-            <div className='list-users__switch'>
-                <Switch
-                defaultChecked
-                onChange={ () => {setViewUserActive(!viewUserActive)} }
-                >
-                </Switch>
-                <span>
-                    {viewUserActive ? 'Usuarios Activos' : 'Usuarios Inactivos'}
-                </span>
+            <div className='list-users__header'>
+                <div className='list-users__header-switch'>
+                    <Switch
+                    defaultChecked
+                    onChange={ () => {setViewUserActive(!viewUserActive)} }
+                    >
+                    </Switch>
+                    <span>
+                        {viewUserActive ? 'Usuarios Activos' : 'Usuarios Inactivos'}
+                    </span>
+                </div>
+                <Button
+                type='primary'
+                onClick={addUserModal}
+                >Nuevo Usuario</Button>
             </div>
+
             {viewUserActive ? 
             <UserActive 
                 usersActive={usersActive} 
