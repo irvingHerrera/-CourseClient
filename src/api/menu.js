@@ -39,3 +39,28 @@ export function updateMenuApi(token, menuId, data) {
     });
 
 }
+
+export function activateMenuApi(token, menuId, data) {
+    const url = `${basePath}/${apiVersion}/activateMenu/${menuId}`;
+
+    const params = {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization' : token
+        },
+        body: JSON.stringify({ active: data })
+    };
+
+    return fetch(url, params)
+    .then(response => {
+        return response.json();
+    })
+    .then(result => {
+        return result.message;
+    })
+    .catch(err => {
+        return err.message;
+    });
+
+}
