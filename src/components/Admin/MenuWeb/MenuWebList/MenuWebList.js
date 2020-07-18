@@ -5,6 +5,7 @@ import DragSortableList from 'react-drag-sortable'
 import { updateMenuApi, activateMenuApi } from '../../../../api/menu';
 import { getAccessTokenApi } from '../../../../api/auth';
 import AddMenuWebForm from '../AddMenuWebForm'
+import EditMenuWebForm from '../EditMenuWebForm'
 
 import './MenuWebList.scss'
 
@@ -23,7 +24,9 @@ export default function MenuWebList(props) {
         menu.forEach(item => {
             console.log(item);
             listItemsArray.push({
-                content: (<MenuItem item={item} activateMenu={activateMenu}></MenuItem>)
+                content: (<MenuItem item={item} 
+                    activateMenu={activateMenu} 
+                    editMenuWebmodal={editMenuWebmodal}></MenuItem>)
             });
         })
         setlistItems(listItemsArray);
@@ -59,13 +62,22 @@ export default function MenuWebList(props) {
     };
 
     const addMenuWebModal = () => {
-        console.log('llllll');
         setVisibleModal(true);
         setModalTitle('Creando nuevo menú');
         setModalContent(<AddMenuWebForm 
             setVisibleModal={setVisibleModal} 
             setReloadMenu={setReloadMenu}
         ></AddMenuWebForm>);
+    }
+
+    const editMenuWebmodal = menu => {
+        setVisibleModal(true);
+        setModalTitle(`Editanto menu: ${menu.title}`);
+        setModalContent(
+            <EditMenuWebForm setVisibleModal={setVisibleModal} 
+            setReloadMenu={setReloadMenu}
+            menu={menu}></EditMenuWebForm>
+        );
     }
 
     return(
@@ -94,7 +106,7 @@ export default function MenuWebList(props) {
 }
 
 function MenuItem(props) {
-    const { item, activateMenu } = props;
+    const { item, activateMenu, editMenuWebmodal} = props;
 
     return (
         <List.Item
@@ -102,7 +114,7 @@ function MenuItem(props) {
             <Switch defaultChecked={item.active}
                 onChange={e => activateMenu(item, e)}
             ></Switch>,
-            <Button type='primary'>
+            <Button type='primary' onClick={() =>editMenuWebmodal(item)}>
                 <Icon type='edit'></Icon>
             </Button>,
             <Button type='danger'>
