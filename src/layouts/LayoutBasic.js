@@ -11,15 +11,18 @@ export default function(props) {
     const { Footer } = Layout;
 
  return(
-    <Row>
-        <Col md={4}></Col>
-        <Col md={16}>
-            <MenuTop></MenuTop>
-            <LoadRoutes routes={routes}></LoadRoutes>
-            <Footer>Irving Herrera</Footer>
-        </Col>
-        <Col md={4}></Col>
-    </Row>
+     <>
+        <Row>
+            <Col md={4}></Col>
+            <Col md={16}>
+                <MenuTop></MenuTop>
+                
+            </Col>
+            <Col md={4}></Col>
+        </Row>
+        <LoadRoutes routes={routes}></LoadRoutes>
+        <Footer>Irving Herrera</Footer>
+    </>
 );
 
     function LoadRoutes({ routes }) {
