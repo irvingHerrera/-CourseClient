@@ -3,6 +3,7 @@ import { Menu } from 'antd';
 import { Link } from 'react-router-dom';
 import { getMenuApi } from '../../../api/menu';
 import logoWhite from '../../../assets/png/logo-white.png';
+import SocialLinks from '../SocialLinks'
 
 import './MenuTop.scss'
 
@@ -24,13 +25,6 @@ export default function MenuTop() {
                     <img src={logoWhite} alt='logo' />
                 </Link>
             </Menu.Item>
-           {/* <Menu.Item className='menu-top-web__item'>
-                <Link to={'/'}>Home</Link>
-            </Menu.Item>
-            <Menu.Item className='menu-top-web__item'>
-                <Link to={'/contact'}>Contacto</Link>
-    </Menu.Item>*/}
-
              {
                  menuData.map(item => {
                      const external = item.url.indexOf('http') > -1 ? true : false;
@@ -53,7 +47,7 @@ export default function MenuTop() {
                  })
              }
 
-            <div>Social Media...</div>
+            <SocialLinks></SocialLinks>
         </Menu>
     )
 }
