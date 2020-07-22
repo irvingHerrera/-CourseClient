@@ -12,7 +12,6 @@ export default function AddUserForm(props) {
 
     const addUser = event => {
         event.preventDefault();
-        console.log(userData);
         if(!userData.name ||
             !userData.lastname ||
             !userData.role ||

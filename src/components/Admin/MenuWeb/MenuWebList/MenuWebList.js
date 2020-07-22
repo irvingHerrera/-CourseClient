@@ -22,7 +22,6 @@ export default function MenuWebList(props) {
         const listItemsArray = [];
 
         menu.forEach(item => {
-            console.log(item);
             listItemsArray.push({
                 content: (<MenuItem item={item} 
                     activateMenu={activateMenu} 
@@ -34,8 +33,7 @@ export default function MenuWebList(props) {
     }, [menu]);
 
     const activateMenu = (menu, status) => {
-        const token = getAccessTokenApi();
-     console.log(token);
+    const token = getAccessTokenApi();
 
      activateMenuApi(token, menu._id, status)
         .then(response => {

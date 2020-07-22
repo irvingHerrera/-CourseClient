@@ -52,7 +52,6 @@ export default function EditMenuWebForm(props) {
 
 function EditForm(props) {
     const { menuWebData, setMenuWebData, editMenu } = props;
-    console.log('EditForm',menuWebData);
     return(
         <Form className='form-edit' onSubmit={editMenu}>
             <Form.Item>
