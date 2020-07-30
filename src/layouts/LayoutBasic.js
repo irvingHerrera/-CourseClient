@@ -1,14 +1,14 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
-import { Layout, Row, Col } from 'antd';
+import { Row, Col } from 'antd';
 import MenuTop from '../components/Web/MenuTop'
+import Footer from '../components/Web/Footer';
 
 import './LayoutBasic.scss';
 
 export default function(props) {
 
     const { routes } = props;
-    const { Footer } = Layout;
 
  return(
      <>
@@ -21,7 +21,7 @@ export default function(props) {
             <Col md={4}></Col>
         </Row>
         <LoadRoutes routes={routes}></LoadRoutes>
-        <Footer>Irving Herrera</Footer>
+        <Footer/>
     </>
 );
 
