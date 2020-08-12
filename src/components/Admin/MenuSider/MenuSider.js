@@ -31,6 +31,12 @@ function MenuSider(props) {
                     <span className='nav-text'>Menu</span>
                 </Link>
             </Menu.Item>
+            <Menu.Item key='/admin/courses'>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
+                <Link to={'/admin/courses'}>
+                    <Icon type='book'></Icon>
+                    <span className='nav-text'>Cursos</span>
+                </Link>
+            </Menu.Item>
         </Menu>
         </Sider>
     );

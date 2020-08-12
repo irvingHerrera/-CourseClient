@@ -12,6 +12,7 @@ import Home from '../pages/Home';
 import Contact from '../pages/Contact';
 import AdminUser from '../pages/Admin/Users';
 import Course from '../pages/Course';
+import AdminCourses from '../pages/Admin/Courses';
 
 //other
 import Error404 from '../pages/Error404';
@@ -40,6 +41,11 @@ const routes = [
             {
                 path: '/admin/menu',
                 component: MenuWeb,
+                exact: true
+            },
+            {
+                path: '/admin/courses',
+                component: AdminCourses,
                 exact: true
             },
             {
