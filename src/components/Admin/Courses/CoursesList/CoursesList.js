@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { List, Button, Icon, Modal as ModalAntd, notification } from 'antd';
 import DragSortableList from 'react-drag-sortable';
 import Modal from '../../../Modal';
-import { getCourseDataUdemyApi } from '../../../../api/courses'
+import { getCourseDataUdemyApi, deleteCourseApí } from '../../../../api/courses'
+import { getAccessTokenApi } from '../../../../api/auth';
 
 import './CoursesList.scss'
 
@@ -20,7 +21,7 @@ export default function CoursesList(props) {
        courses.forEach(item => {
             listCourseArray.push({
                 content: (
-                    <Course course={item}>
+                    <Course course={item} deteleCourse={deteleCourse}>
 
                     </Course>
                 )
@@ -32,6 +33,33 @@ export default function CoursesList(props) {
     const onSort = (sortedList, dropEvent) => {
         console.log(sortedList);
     };
+
+    const deteleCourse = course => {
+        const token = getAccessTokenApi();
+        console.log(course);
+        confirm({
+            title: 'Eliminando curso',
+            content: `¿Estas seguro de que quieres eliminar el curso ${course.title}?`,
+            okText: 'Eliminar',
+            okType: 'danger',
+            cancelText: 'Cancelar',
+            onOk() {
+                deleteCourseApí(token, course._id)
+                .then(response => {
+                    const typeNotificacion = response.code === 200 ? 'success' : 'warning';
+
+                    notification[typeNotificacion]({
+                        message: response.message
+                    });
+                    setReloadCourses(true);
+                }).catch(() => {
+                    notification['error']({
+                        message: 'Error del servidor intentalo mas tarde'
+                    })
+                });
+            }
+        })
+    }
    
     return (
         <div className='courses-list'>
@@ -55,7 +83,7 @@ export default function CoursesList(props) {
 }
 
 function Course(props) {
-    const { course } = props;
+    const { course, deteleCourse } = props;
     const [ courseData, setCourseData ] = useState(null);
 
     useEffect(() => {
@@ -81,7 +109,7 @@ function Course(props) {
                 <Button type='primary' onClick={() => console.log('Editar curso')}>
                     <Icon type='edit'></Icon>
                 </Button>,
-                <Button type='danger' onClick={() => console.log('Eliminar curso')}>
+                <Button type='danger' onClick={() => deteleCourse(course)}>
                     <Icon type='delete'></Icon>
                 </Button>
             ]}
