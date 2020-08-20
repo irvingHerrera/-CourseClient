@@ -4,6 +4,7 @@ import DragSortableList from 'react-drag-sortable';
 import Modal from '../../../Modal';
 import { getCourseDataUdemyApi, deleteCourseApí } from '../../../../api/courses'
 import { getAccessTokenApi } from '../../../../api/auth';
+import AddEditCourseForm from '../AddEditCourseForm';
 
 import './CoursesList.scss'
 
@@ -21,7 +22,10 @@ export default function CoursesList(props) {
        courses.forEach(item => {
             listCourseArray.push({
                 content: (
-                    <Course course={item} deteleCourse={deteleCourse}>
+                    <Course course={item} 
+                    deteleCourse={deteleCourse}
+                    updateCourseModal={updateCourseModal}
+                    >
 
                     </Course>
                 )
@@ -33,6 +37,29 @@ export default function CoursesList(props) {
     const onSort = (sortedList, dropEvent) => {
         console.log(sortedList);
     };
+
+    const addCourseModal = () => {
+        setIsVisibleModel(true);
+        setModalTitle('Creando nuevo curso');
+        setModalContent(
+            <AddEditCourseForm
+                setIsVisibleModel={setIsVisibleModel}
+                setReloadCourses={setReloadCourses}
+            ></AddEditCourseForm>
+        );
+    }
+
+    const updateCourseModal = (course) => {
+        setIsVisibleModel(true);
+        setModalTitle('Editando curso');
+        setModalContent(
+            <AddEditCourseForm
+                setIsVisibleModel={setIsVisibleModel}
+                setReloadCourses={setReloadCourses}
+                course={course}
+            ></AddEditCourseForm>
+        );
+    }
 
     const deteleCourse = course => {
         const token = getAccessTokenApi();
@@ -64,7 +91,7 @@ export default function CoursesList(props) {
     return (
         <div className='courses-list'>
             <div className='courses-list__header'>
-                <Button type='primary' onClick={() => { console.log('Creando curso'); }}>
+                <Button type='primary' onClick={addCourseModal}>
                     Nuevo Curso
                 </Button>
             </div>
@@ -78,12 +105,17 @@ export default function CoursesList(props) {
 
                 </DragSortableList>
             </div>
+                <Modal
+                    title={modalTitle}
+                    isVisible={isVisibleModel}
+                    setIsVisible={setIsVisibleModel}
+                >{modalContent}</Modal>
         </div>
     )
 }
 
 function Course(props) {
-    const { course, deteleCourse } = props;
+    const { course, deteleCourse, updateCourseModal } = props;
     const [ courseData, setCourseData ] = useState(null);
 
     useEffect(() => {
@@ -106,7 +138,7 @@ function Course(props) {
     return(
         <List.Item
             actions={[
-                <Button type='primary' onClick={() => console.log('Editar curso')}>
+                <Button type='primary' onClick={() => updateCourseModal(course)}>
                     <Icon type='edit'></Icon>
                 </Button>,
                 <Button type='danger' onClick={() => deteleCourse(course)}>
