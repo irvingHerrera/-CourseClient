@@ -19,7 +19,6 @@ export default function Newsletter() {
             });
         } else {
             suscribeNewsletterApi(email).then(response => {
-                console.log(response);
                 if(response.code !== 200) {
                     notification['warning']({
                         message: response.message

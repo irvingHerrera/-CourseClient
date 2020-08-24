@@ -73,7 +73,6 @@ export default function CoursesList(props) {
 
     const deteleCourse = course => {
         const token = getAccessTokenApi();
-        console.log(course);
         confirm({
             title: 'Eliminando curso',
             content: `¿Estas seguro de que quieres eliminar el curso ${course.title}?`,
