@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { List, Button, Icon, Modal as ModalAntd, notification } from 'antd';
 import DragSortableList from 'react-drag-sortable';
 import Modal from '../../../Modal';
-import { getCourseDataUdemyApi, deleteCourseApí } from '../../../../api/courses'
+import { getCourseDataUdemyApi, deleteCourseApi, updateCourseApi } from '../../../../api/courses'
 import { getAccessTokenApi } from '../../../../api/auth';
 import AddEditCourseForm from '../AddEditCourseForm';
 
@@ -35,7 +35,17 @@ export default function CoursesList(props) {
     }, [courses])
 
     const onSort = (sortedList, dropEvent) => {
-        console.log(sortedList);
+        const token = getAccessTokenApi();
+
+        sortedList.forEach(item => {
+            const { _id } = item.content.props.course;
+            const order = item.rank;
+
+            updateCourseApi(token, _id, {order})
+            .then(response => {
+                
+            })
+        });
     };
 
     const addCourseModal = () => {
@@ -71,7 +81,7 @@ export default function CoursesList(props) {
             okType: 'danger',
             cancelText: 'Cancelar',
             onOk() {
-                deleteCourseApí(token, course._id)
+                deleteCourseApi(token, course._id)
                 .then(response => {
                     const typeNotificacion = response.code === 200 ? 'success' : 'warning';
 

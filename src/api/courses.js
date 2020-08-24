@@ -33,7 +33,7 @@ export function getCourseDataUdemyApi(id) {
     });
 }
 
-export function deleteCourseApí(token, id) {
+export function deleteCourseApi(token, id) {
     const url = `${basePath}/${apiVersion}/deleteCourse/${id}`;
 
     const params = {
