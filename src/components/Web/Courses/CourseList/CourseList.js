@@ -6,7 +6,7 @@ import './CourseList.scss';
 import Course from '../../../../pages/Course';
 export default function CourseList(props) {
     const { courses } = props;
-    console.log(courses);
+
     return (
         <div className='course-list'>
             <Row>
@@ -24,8 +24,10 @@ export default function CourseList(props) {
 
 function Courses(props) {
     const {course} = props;
-    const [courseInfo, setCourseInfo] = useState(null);
-    console.log(courseInfo);
+    const [courseInfo, setCourseInfo] = useState({});
+    const [urlCurse, setUrlCurse] = useState('')
+    const {Meta} = Card;
+
     useEffect(() => {
         getCourseDataUdemyApi(course.idCourse)
         .then(response => {
@@ -35,6 +37,7 @@ function Courses(props) {
                 });
             } else {
                 setCourseInfo(response.data);
+                mountUrl(response.data.url);
             }
         })
         .catch(() => {
@@ -44,5 +47,31 @@ function Courses(props) {
         });
     }, [course])
 
-    return <p>ff</p>
+    const mountUrl = url => {
+        if(!course.link) {
+            const baseUrl = `https://www.udemy.com${url}`;
+            const finalUrl = baseUrl + (course.coupon ? `?couponCode=${course.coupon}` : '');
+            setUrlCurse(finalUrl);
+        } else {
+            setUrlCurse(course.link);
+        }
+    };
+
+    return (
+        <a href={urlCurse} target='_blank' rel=''>
+            <Card
+                cover={<img src={courseInfo.image_480x270} alt={courseInfo.title}></img>}
+            >
+                <Meta title={courseInfo.title} description={courseInfo.headline}>
+                </Meta>
+                <Button>Entrar en el curso</Button>
+                <div className='course-list__course-footer'>
+                    <span>{course.price ? `${course.price}` : courseInfo.price}</span>
+                    <div>
+                        <Rate disabled defaultValue={5}></Rate>
+                    </div>
+                </div>
+            </Card>
+        </a>
+    )
 }
