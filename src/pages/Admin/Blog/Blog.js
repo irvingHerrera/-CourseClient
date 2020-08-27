@@ -4,6 +4,7 @@ import queryString from 'query-string';
 import Modal from '../../../components/Modal';
 import { withRouter } from 'react-router-dom';
 import {getPostApi} from '../../../api/post';
+import PostsList from '../../../components/Admin/Blog/PostsList';
 
 import './Blog.scss';
 
@@ -16,10 +17,8 @@ function Blog(props) {
     const [post, setPost] = useState(null)
     const {page = 1} = queryString.parse(location.search);
 
-    console.log(post);
-
     useEffect(() => {
-        getPostApi(12, page)
+        getPostApi(10, page)
         .then(response => {
             if(response?.code !== 200) {
                 notification['warning']({
@@ -35,14 +34,18 @@ function Blog(props) {
             });
         });
         setReloadPosts(false);
-    }, [page])
+    }, [page, reloadPosts])
+
+    if(!post) {
+        return null;
+    }
 
     return (
         <div className='blog'>
             <div className='blog__add-post'>
                 <Button type='primary'>Nuevo post</Button>
             </div>
-            <h1>Post list</h1>
+            <PostsList posts={post}></PostsList>
             <h2>Paginación</h2>
 
             <Modal 
