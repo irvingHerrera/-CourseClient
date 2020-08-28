@@ -5,6 +5,7 @@ import Modal from '../../../components/Modal';
 import { withRouter } from 'react-router-dom';
 import {getPostApi} from '../../../api/post';
 import PostsList from '../../../components/Admin/Blog/PostsList';
+import Pagination from '../../../components/Pagination';
 
 import './Blog.scss';
 
@@ -46,7 +47,7 @@ function Blog(props) {
                 <Button type='primary'>Nuevo post</Button>
             </div>
             <PostsList posts={post}></PostsList>
-            <h2>Paginación</h2>
+            <Pagination posts={post} location={location} history={history}></Pagination>
 
             <Modal 
                 title={modalTitle}

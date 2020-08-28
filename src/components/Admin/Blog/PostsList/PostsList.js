@@ -36,18 +36,14 @@ function Post(props) {
                         <Icon type='eye'></Icon>
                     </Button>
                 </Link>,
-                <Link>
-                    <Button
-                        type='primary'>
-                        <Icon type='edit'></Icon>
-                    </Button>
-                </Link> ,
-                <Link>
-                    <Button
-                        type='danger'>
-                        <Icon type='delete'></Icon>
-                    </Button>
-                </Link>
+                <Button
+                    type='primary'>
+                    <Icon type='edit'></Icon>
+                </Button>,
+                <Button
+                    type='danger'>
+                    <Icon type='delete'></Icon>
+                </Button>
             ]}>
                 <List.Item.Meta title={post.title}></List.Item.Meta>
         </List.Item>
