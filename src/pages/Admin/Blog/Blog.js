@@ -13,7 +13,7 @@ function Blog(props) {
     const { location, history } = props;
     const [modalTitle, setModalTitle] = useState('');
     const [isVisible, setisVisible] = useState(false);
-    const [modalContent, setmodalContent] = useState(null);
+    const [modalContent, setModalContent] = useState(null);
     const [reloadPosts, setReloadPosts] = useState(false)
     const [post, setPost] = useState(null)
     const {page = 1} = queryString.parse(location.search);
@@ -46,7 +46,7 @@ function Blog(props) {
             <div className='blog__add-post'>
                 <Button type='primary'>Nuevo post</Button>
             </div>
-            <PostsList posts={post}></PostsList>
+            <PostsList posts={post} setReloadPosts={setReloadPosts}></PostsList>
             <Pagination posts={post} location={location} history={history}></Pagination>
 
             <Modal 
