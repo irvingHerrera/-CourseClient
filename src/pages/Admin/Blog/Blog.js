@@ -5,6 +5,7 @@ import Modal from '../../../components/Modal';
 import { withRouter } from 'react-router-dom';
 import {getPostApi} from '../../../api/post';
 import PostsList from '../../../components/Admin/Blog/PostsList';
+import AddEditPostForm from '../../../components/Admin/Blog/AddEditPostForm';
 import Pagination from '../../../components/Pagination';
 
 import './Blog.scss';
@@ -12,7 +13,7 @@ import './Blog.scss';
 function Blog(props) {
     const { location, history } = props;
     const [modalTitle, setModalTitle] = useState('');
-    const [isVisible, setisVisible] = useState(false);
+    const [isVisible, setIsVisible] = useState(false);
     const [modalContent, setModalContent] = useState(null);
     const [reloadPosts, setReloadPosts] = useState(false)
     const [post, setPost] = useState(null)
@@ -35,7 +36,17 @@ function Blog(props) {
             });
         });
         setReloadPosts(false);
-    }, [page, reloadPosts])
+    }, [page, reloadPosts]);
+
+    const addPost= () => {
+        setIsVisible(true);
+        setModalTitle('Creando nuevo post');
+        setModalContent(<AddEditPostForm 
+            setIsVisible ={setIsVisible} 
+            setReloadPosts={setReloadPosts}
+            post={null}></AddEditPostForm>);
+        
+    }
 
     if(!post) {
         return null;
@@ -44,7 +55,7 @@ function Blog(props) {
     return (
         <div className='blog'>
             <div className='blog__add-post'>
-                <Button type='primary'>Nuevo post</Button>
+                <Button type='primary' onClick={addPost}>Nuevo post</Button>
             </div>
             <PostsList posts={post} setReloadPosts={setReloadPosts}></PostsList>
             <Pagination posts={post} location={location} history={history}></Pagination>
@@ -52,9 +63,9 @@ function Blog(props) {
             <Modal 
                 title={modalTitle}
                 isVisible={isVisible}
-                setIsvisible={setisVisible}
+                setIsVisible={setIsVisible}
                 width='75%'
-            ></Modal>
+            >{modalContent}</Modal>
         </div>
     )
 }
