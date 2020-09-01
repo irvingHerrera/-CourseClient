@@ -3,7 +3,7 @@ import { Row, Col, Form, Icon, Input, Button, DatePicker, notification } from 'a
 import { Editor } from '@tinymce/tinymce-react'
 import moment from 'moment';
 import {getAccessTokenApi} from '../../../../api/auth';
-import { addPostApi } from '../../../../api/post';
+import { addPostApi, updatePostApi } from '../../../../api/post';
 
 import './AddEditPostForm.scss';
 
@@ -31,7 +31,7 @@ export default function AddEditPostForm(props) {
             if(!post) {
                 addPost();
             } else {
-    
+                updatePost();
             }
         }
     }
@@ -40,6 +40,27 @@ export default function AddEditPostForm(props) {
         const token = getAccessTokenApi();
 
         addPostApi(token, postData)
+        .then(response => {
+            const typeNotification = response.code === 200 ? 'success' : 'warning';
+
+            notification[typeNotification]({
+                message: response.message
+            });
+            setIsVisible(false);
+            setReloadPosts(true);
+            setPostData({});
+        })
+        .catch(err => {
+            notification['error']({
+                message: 'Error del servidor'
+            });
+        });
+    }
+
+    const updatePost = () => {
+        const token = getAccessTokenApi();
+
+        updatePostApi(token, post._id, postData)
         .then(response => {
             const typeNotification = response.code === 200 ? 'success' : 'warning';
 
