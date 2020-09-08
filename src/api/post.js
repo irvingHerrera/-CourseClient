@@ -90,3 +90,19 @@ export function updatePostApi(token, id, data) {
 
 
 }
+
+export function getPostUrlApi(urlPost) {
+    const url = `${basePath}/${apiVersion}/getPostByUrl/${urlPost}`;
+
+    return fetch(url) 
+    .then(response => {
+        return response.json();
+    })
+    .then(result => {
+        return result;
+    }) 
+    .catch(err => {
+        return err;
+    });
+
+}
